@@ -15,7 +15,7 @@ sys.setdefaultencoding('utf-8')
 
 
 def cal_similarity(avector, songs):
-    rank = []
+    r = []
     for song in songs:
         tmp = song[2].split(',')
         if all(v == u'0' for v in tmp):
@@ -23,9 +23,9 @@ def cal_similarity(avector, songs):
 
         svector = [float(x) for x in tmp]
         cos_sim = 1 - spatial.distance.cosine(avector, svector)
-        rank.append((song[0], song[1], cos_sim))
+        r.append((song[0], song[1], cos_sim))
 
-    rank.sort(key=lambda tup: tup[2], reverse=True)
+    rank = sorted(r, key=lambda tup: tup[2], reverse=True)
 
     c3 = conn.cursor()
     c3.execute("SELECT * FROM crawling")
@@ -33,6 +33,8 @@ def cal_similarity(avector, songs):
 
     for i in range(0, 50):
         #print crawling_songs[rank[i][1]][0]
+        if i > 0 and rank[i][2] == rank[i-1][2]:
+            continue
         print "song index: {} song name: {} album name: {} singer: {} similarity: {}".format(rank[i][1], rank[i][0], crawling_songs[rank[i][1]][0], crawling_songs[rank[i][1]][3], rank[i][2])
 
     '''
@@ -53,7 +55,7 @@ if __name__ == '__main__':
     mname = bin_file[-18:-17]
     model = models.Word2Vec.load_word2vec_format(sys.argv[1], binary=True)
 
-    conn = sqlite3.connect('../crawling/dcard.db')
+    conn = sqlite3.connect('../data/dcard.db')
     c = conn.cursor()
     c.execute("SELECT title, content FROM crawling WHERE likenum>100 and classname='感情'")
     article = c.fetchall()
@@ -69,7 +71,7 @@ if __name__ == '__main__':
         if word in model.vocab:
             avector = map(lambda (x, y): x + y, zip(avector, model[word]))
 
-    conn = sqlite3.connect('../crawling/song.db')
+    conn = sqlite3.connect('../data/song.db')
     c2 = conn.cursor()
     table_name = mname + '_' + window + '_' + str(vsize)
     c2.execute("SELECT * FROM {}".format(table_name))
