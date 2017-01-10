@@ -36,6 +36,7 @@ var/
 
 #db
 *.db
+*.sqlite3
 
 #json
 *.json
