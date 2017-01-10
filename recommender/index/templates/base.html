@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title_name %}{% endblock title_name %}</title>
+    <!-- bootstrap, bootwatch CSS -->
+    <link rel="stylesheet" href={% static "bootswatch/cerulean/bootstrap.min.css" %}>
+    <script src={% static "jquery/dist/jquery.min.js" %}></script>
+    <script src={% static "bootstrap/dist/js/bootstrap.min.js" %}></script>
+    {% block import_source %}
+    {% endblock import_source %}
+  </head>
+  <body>
+    <!-- wrap all page elements to div -->
+    <div class="wrap-body container-fluid">
+      {% block body_block %}
+      {% endblock body_block %}
+    </div>
+  </body>
+</html>
