@@ -1,3 +1,4 @@
+#-*- encoding=UTF-8 -*-
 """
 Django settings for recommender project.
 
@@ -93,7 +94,7 @@ WSGI_APPLICATION = 'recommender.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'song.db'),
+        'NAME': os.path.join(BASE_DIR + '/data', 'song.db'),
     }
 }
 
