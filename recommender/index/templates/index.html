@@ -28,9 +28,11 @@
           </div>
           <div class="col-md-6" align="left">
               {% for song in song_list %}
+              <div>
                 <h4>專輯: {{ song.aname }}&nbsp&nbsp&nbsp歌名:{{ song.sname }}&nbsp&nbsp&nbsp歌手:{{ song.singer }}</h4><br>
-                <p>{{ song.lyrics|linebreaksbr }}</p>
+                <p class="lyrics" data-toggle="modal" data-target="#myModal" l="{{ song.lyrics|linebreaks }}">{{ song.lyrics|linebreaksbr|truncatechars:100 }}</p>
                 <hr>
+              </div>
               {% endfor %}
           </div>
         </div>
@@ -41,4 +43,18 @@
       {% endif %}
     </div>
   </center>
+  <script type="text/javascript">
+    $( ".lyrics" ).click(function() {
+      $( "#lyrics" ).html(this.getAttribute("l"));
+    });
+  </script>
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <p id="lyrics" style="font-size:18px;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock body_block %}

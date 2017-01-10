@@ -7,6 +7,7 @@ from gensim import models
 from gensim.models import word2vec
 from recommender.settings import PROJECT_ROOT
 import jieba
+import json
 from scipy import spatial
 ###
 from index.models import S05250
@@ -19,6 +20,20 @@ model = models.Word2Vec.load_word2vec_format(PROJECT_ROOT + '/data/bin/s_05_250.
 vsongs = S05250.objects.all()
 csongs = Crawling.objects.all()
 def crawl(url):
+
+    pattern = re.compile('-')
+    aid = ''
+    if pattern.search(url):
+        idx = pattern.search(url).start(0)
+        aid = url[idx-9:idx]
+
+    print aid
+    api = 'https://www.dcard.tw/_api/posts/' + aid + '?'
+    print api
+    article = json.load(requests.get(api).text)
+    print article['title']
+    print article['content']
+
     try:
         html_doc = requests.get(url)
     except requests.exceptions.RequestException as e:
