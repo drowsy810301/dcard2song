@@ -8,14 +8,14 @@ from index.recomm import find_song
 
 def index(request):
     article = ''
-    word = u'自由'
+    #word = u'自由'
     if request.method == 'POST':
         url = request.POST.get("link")
         article = crawl(url)
         #return render(request, "index.html", {'article_content': article_content})
         #print len(model[word])
         #song_list = find_song(model)
-        song_list = find_song(article)
-        return render(request, "index.html", {'article': article})
+        song_list = find_song(article['content'])
+        return render(request, "index.html", {'article': article, 'song_list': song_list})
 
     return render(request, "index.html", {'article': article})

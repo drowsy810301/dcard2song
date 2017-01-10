@@ -8,19 +8,35 @@
 {% endblock import_source %}
 {% block body_block %}
   <center>
-    <div style="width: 60%">
-      <h1>Music Recommender</h1>
-      <hr>
+    <div style="width: 60%;">
+      <h1><p>Music Recommender</p></h1>
+      <hr style="height:5px;"">
       <form class="form-horizontal" method="post">
         {% csrf_token %}
         <div class="form-group">
           <input class="form-control" id="focusedInput" name="link" type="text" placeholder="Dcard link">
         </div>
       </form>
-      {% if article_content %}
-        {{ article.title }}
-      {% elif article_content == False %}
-        fuck
+      {% if article %}
+        <div class="row">
+          <div class="col-md-6">
+            <div class="well">
+              <h2>{{ article.title }}</h2>
+              <br>
+              <div><p align="left">{{ article.content|linebreaksbr }}</p></div>
+            </div>
+          </div>
+          <div class="col-md-6" align="left">
+              {% for song in song_list %}
+                <h4>專輯: {{ song.aname }}&nbsp&nbsp&nbsp歌名:{{ song.sname }}&nbsp&nbsp&nbsp歌手:{{ song.singer }}</h4><br>
+                <p>{{ song.lyrics|linebreaksbr }}</p>
+                <hr>
+              {% endfor %}
+          </div>
+        </div>
+
+      {% elif article == False %}
+        <h3>error link<h3>
       {% else %}
       {% endif %}
     </div>

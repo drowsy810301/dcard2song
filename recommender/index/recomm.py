@@ -10,11 +10,14 @@ import jieba
 from scipy import spatial
 ###
 from index.models import S05250
+from index.models import Crawling
 reload(sys)
 sys.setdefaultencoding('utf-8')
 ###
 model = models.Word2Vec.load_word2vec_format(PROJECT_ROOT + '/data/bin/s_05_250.model.bin', binary=True)
-
+###
+vsongs = S05250.objects.all()
+csongs = Crawling.objects.all()
 def crawl(url):
     try:
         html_doc = requests.get(url)
@@ -59,14 +62,59 @@ def crawl(url):
     except:
         content = ''
 
-    print gender
-    article = {'title': title, 'content': content, 'author':author, 'board': board, 'date': date, 'gender': gender}
+    content = """大一時總不理解為何有人說大學交不到
+高中的摯友
+曾經深信身旁的室友會陪自己走過四年
+年級越大越能體悟出那種社會感
+
+雖然一起上課
+雖然就坐在隔壁
+雖然一起吃飯聊天
+
+可是討論的話題不再是自己熟悉的內容
+可是提到的人名不再是之前的那幾個人
+
+開始有些出外玩打卡沒有了自己
+開始有些約在事後才知道被放鳥
+開始要提問才知道她們在說什麼
+開始有些事可能永遠最後才知道
+
+就在想說算了的時候
+好像又開始跟她們有了交集
+過了一下子那交集又斷了聯繫
+
+起起落落的關係
+久了其實蠻累的
+不是不能自己一個人
+只是因為自己還在乎所以不想失去
+失去那份得來不易的友情
+
+
+尤其最討厭分組實驗
+以前總信誓旦旦的知道自己會有組
+現在總要擔心我是否會成為落單的那一個
+怕又找到雷的
+說好一起時
+然後交名單時你卻直接被放生他們再來跟你說
+
+啊 他們把我拉過去啊
+
+大學真的是一個你今天不搶先他 明天就就被他搶先了
+然後有些心機又是蠻傷人的
+可是明明知道他在幹麻卻還要裝作沒這回事
+整天笑臉迎人
+真是噁心
+
+只是有感而發啦
+哀哀
+
+我想我還是搬出去好了..'
+"""
+    article = {'title': title, 'content': content}
     return article
 
 def find_song(article):
-    obj = S05250.objects.all()
-    print len(obj)
-    '''
+
     ###
     avector = [0] * 250
     article = re.sub(r'^https?:\/\/.*[\r\n]*', '', article, flags=re.MULTILINE)
@@ -74,17 +122,20 @@ def find_song(article):
     for word in words:
         if word in model.vocab:
             avector = map(lambda (x, y): x + y, zip(avector, model[word]))
-    '''
-    '''
+
+
     r = []
-    for song in songs:
-        tmp = song[2].split(',')
+    for song in vsongs:
+        tmp = (song.val).split(',')
         if all(v == u'0' for v in tmp):
             continue
-
         svector = [float(x) for x in tmp]
         cos_sim = 1 - spatial.distance.cosine(avector, svector)
-        r.append((song[0], song[1], cos_sim))
-
-    rank = sorted(r, key=lambda tup: tup[2], reverse=True)
-    '''
+        r.append((song.name , song.index, cos_sim))
+    r = sorted(r, key=lambda tup: tup[2], reverse=True)
+    r = r[:5]
+    rank = []
+    for i in range(0,5):
+        print r[i][2]
+        rank.append({'sname': r[i][0], 'aname': csongs[r[i][1]].aname, 'singer': csongs[r[i][1]].singer, 'lyrics': csongs[r[i][1]].lyrics})
+    return rank
