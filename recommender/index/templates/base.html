@@ -8,8 +8,6 @@
     <link rel="stylesheet" href={% static "bootswatch/cerulean/bootstrap.min.css" %}>
     <script src={% static "jquery/dist/jquery.min.js" %}></script>
     <script src={% static "bootstrap/dist/js/bootstrap.min.js" %}></script>
-    {% block import_source %}
-    {% endblock import_source %}
   </head>
   <body>
     <!-- wrap all page elements to div -->
@@ -17,5 +15,7 @@
       {% block body_block %}
       {% endblock body_block %}
     </div>
+    {% block import_source %}
+    {% endblock import_source %}
   </body>
 </html>

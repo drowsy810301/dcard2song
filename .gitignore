@@ -47,3 +47,6 @@ var/
 *.sh
 seg.txt
 data/
+
+*cfg
+apikey.py

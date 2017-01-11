@@ -5,6 +5,40 @@
   Music Recommender
 {% endblock title_name %}
 {% block import_source %}
+
+    <script>
+
+      $(function(){
+        /*
+        $("#fform").on("submit", function(e){
+          e.preventDefault();
+          var request = gapi.client.youtube.search.list({
+              part: "snippet",
+              type: "vedio",
+              //q: encodeURIComponent($("#focusedInput").val()),
+              q: encodeURIComponent("123"),
+              maxResults: 3,
+          });
+          request.execute(function(response){
+              console.log(response);
+          });
+        });
+        */
+        $(".lyrics").click(function(){
+          alert( "Handler for .click() called." );
+        });
+      });
+
+      function init(){
+        gapi.client.setApiKey("{{api}}");
+        gapi.client.load("youtube", "v3", function(){
+          console.log("load api successfully");
+        });
+      }
+
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=init"></script>
+
 {% endblock import_source %}
 {% block body_block %}
   <center>
@@ -14,7 +48,7 @@
       <form class="form-horizontal" method="post">
         {% csrf_token %}
         <div class="form-group">
-          <input class="form-control" id="focusedInput" name="link" type="text" placeholder="Dcard link">
+          <input class="form-control" id="Input" name="link" type="text" placeholder="Dcard link">
         </div>
       </form>
       {% if article %}
@@ -57,4 +91,5 @@
       </div>
     </div>
   </div>
+
 {% endblock body_block %}
