@@ -15,9 +15,9 @@ from index.models import Crawling
 reload(sys)
 sys.setdefaultencoding('utf-8')
 ###
-model = models.Word2Vec.load_word2vec_format(PROJECT_ROOT + '/data/bin/s_05_250.model.bin', binary=True)
+model = models.Word2Vec.load_word2vec_format(PROJECT_ROOT + '/data/bin/c_05_250.model.bin', binary=True)
 ###
-vsongs = S05250.objects.all()
+vsongs = C05250.objects.all()
 csongs = Crawling.objects.all()
 def crawl(url):
 
